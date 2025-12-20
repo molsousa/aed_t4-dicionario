@@ -4,7 +4,9 @@
 typedef struct noTST* TST_TRIE;
 typedef enum{true = 1, false = 0}boolean;
 
-void inserirTST(TST_TRIE*, char*, int);
+TST_TRIE* criar_trie();
+
+boolean inserirTST(TST_TRIE*, char*, int);
 
 void removerTST(TST_TRIE*, char*);
 
