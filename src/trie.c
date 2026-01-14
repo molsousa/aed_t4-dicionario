@@ -121,10 +121,12 @@ static TST_TRIE remover(TST_TRIE h, char* str)
         else
             h->igual = remover(h->igual, str+1);
 
+        /*
         if(h->igual == NULL && h->valor == -1){
             free(h);
             return NULL;
         }
+        */
     }
 
     return h;
