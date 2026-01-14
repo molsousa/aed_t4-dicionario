@@ -44,3 +44,24 @@ void verificar_string(TST_TRIE* h, char* str, int* valor)
         ++*valor;
     }
 }
+
+void ler_arquivo_stopwords(TST_TRIE* h)
+{
+    char arquivo[NOME_MAX] = "stopwords.txt";
+    char str[NOME_MAX];
+
+    /*
+    printf("Insira o nome do arquivo de texto: ");
+    scanf("%[^\n]%*c", arquivo);
+    */
+
+    FILE* fr = fopen(arquivo, "r");
+
+    while(fgets(str, NOME_MAX, fr)){
+        strtok(str, "\n");
+
+        removerTST(h, str);
+    }
+
+    fclose(fr);
+}

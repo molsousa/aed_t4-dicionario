@@ -7,6 +7,8 @@ typedef struct noTST* TST_TRIE;
 
 TST_TRIE* criar_trie();
 
+TST_TRIE* liberar(TST_TRIE*);
+
 int vazia(TST_TRIE);
 
 int inserirTST(TST_TRIE*, char*, int);

@@ -7,9 +7,11 @@ int main()
 
     ler_arquivo_texto(h);
 
-    //imprimir_dicionarioTST(h);
+    ler_arquivo_stopwords(h);
 
-    buscarPrefixo(h, "a");
+    imprimir_dicionarioTST(h);
+
+    h = liberar(h);
 
     return 0;
 }

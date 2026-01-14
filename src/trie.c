@@ -20,6 +20,27 @@ TST_TRIE* criar_trie()
     return h;
 }
 
+static void liberar_recursivo(TST_TRIE h)
+{
+    if(vazia(h))
+        return;
+
+    liberar_recursivo(h->menor);
+    liberar_recursivo(h->igual);
+    liberar_recursivo(h->maior);
+
+    free(h);
+}
+
+TST_TRIE* liberar(TST_TRIE* h)
+{
+    liberar_recursivo(*h);
+
+    free(h);
+
+    return NULL;
+}
+
 int vazia(TST_TRIE h)
 {
     return (h == NULL);
@@ -111,6 +132,9 @@ static TST_TRIE remover(TST_TRIE h, char* str)
 
 void removerTST(TST_TRIE* h, char* str)
 {
+    if(!buscarTST(h, str))
+        return;
+
     *h = remover(*h, str);
 }
 
@@ -177,4 +201,33 @@ void buscarPrefixo(TST_TRIE* h, char* str)
     buscarPrefixo_aux(*h, buffer, str, 0);
 
     free(buffer);
+}
+
+static void buscarTST_aux(TST_TRIE h, char* str, char* buffer, int n, int* res)
+{
+    if(vazia(h))
+        return;
+
+    buscarTST_aux(h->menor, str, buffer, n, res);
+    buffer[n] = h->ch;
+
+    if(h->valor != -1){
+        buffer[n+1] = 0;
+
+        if(!strcmp(buffer, str))
+            *res = 1;
+    }
+
+    buscarTST_aux(h->igual, str, buffer, n+1, res);
+    buscarTST_aux(h->maior, str, buffer, n, res);
+}
+
+int buscarTST(TST_TRIE* h, char* str)
+{
+    int res = 0;
+    char* buffer = malloc(BUFFER_MAX * sizeof(char));
+
+    buscarTST_aux(*h, str, buffer, 0, &res);
+
+    return res;
 }

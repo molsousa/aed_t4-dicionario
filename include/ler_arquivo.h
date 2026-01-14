@@ -10,4 +10,6 @@ void ler_arquivo_texto(TST_TRIE*);
 
 void verificar_string(TST_TRIE*, char*, int*);
 
+void ler_arquivo_stopwords(TST_TRIE*);
+
 #endif // _LER_ARQUIVO_H_INCLUDED
