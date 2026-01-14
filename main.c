@@ -1,18 +1,15 @@
 #include "include/trie.h"
+#include "include/ler_arquivo.h"
 
 int main()
 {
     TST_TRIE* h = criar_trie();
 
-    inserirTST(h, "marcos", 5);
-    inserirTST(h, "maracuja", 12);
-    inserirTST(h, "mestre", 43);
-    inserirTST(h, "mitre", 23);
-    inserirTST(h, "adelio", 9);
-    inserirTST(h, "ademir", 15);
-    inserirTST(h, "consoante", 18);
+    ler_arquivo_texto(h);
 
-    imprimir_dicionarioTST(h);
+    //imprimir_dicionarioTST(h);
+
+    buscarPrefixo(h, "a");
 
     return 0;
 }

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "../include/trie.h"
 
 struct noTST{
@@ -19,7 +20,7 @@ TST_TRIE* criar_trie()
     return h;
 }
 
-boolean vazia(TST_TRIE h)
+int vazia(TST_TRIE h)
 {
     return (h == NULL);
 }
@@ -52,29 +53,29 @@ static TST_TRIE insere(TST_TRIE h, char* str, int valor)
     return h;
 }
 
-static boolean buscaValor(TST_TRIE h, int valor)
+static int buscaValor(TST_TRIE h, int valor)
 {
     if(vazia(h))
-        return false;
+        return 0;
 
     if(h->valor == valor)
-        return true;
+        return 1;
 
     buscaValor(h->menor, valor);
     buscaValor(h->igual, valor);
     buscaValor(h->maior, valor);
 
-    return false;
+    return 0;
 }
 
-boolean inserirTST(TST_TRIE* h, char* str, int valor)
+int inserirTST(TST_TRIE* h, char* str, int valor)
 {
     if(buscaValor(*h, valor))
-        return false;
+        return 0;
 
     *h = insere(*h, str, valor);
 
-    return true;
+    return 1;
 }
 
 static TST_TRIE remover(TST_TRIE h, char* str)
@@ -113,16 +114,67 @@ void removerTST(TST_TRIE* h, char* str)
     *h = remover(*h, str);
 }
 
-void imprimir_dicionarioTST(TST_TRIE* h)
+static void imprimir_dicionario_aux(TST_TRIE h, char* buffer, int n)
 {
-    if(vazia(*h))
+    if(vazia(h))
         return;
 
-    imprimir_dicionarioTST(&(*h)->menor);
+    imprimir_dicionario_aux(h->menor, buffer, n);
 
-    if((*h)->valor != -1)
-        printf("%d\n", (*h)->valor);
+    buffer[n] = h->ch;
 
-    imprimir_dicionarioTST(&(*h)->igual);
-    imprimir_dicionarioTST(&(*h)->maior);
+    if(h->valor != -1){
+        buffer[n+1] = 0;
+        printf("%s | %d\n", buffer, h->valor);
+    }
+
+    imprimir_dicionario_aux(h->igual, buffer, n+1);
+    imprimir_dicionario_aux(h->maior, buffer, n);
+}
+
+void imprimir_dicionarioTST(TST_TRIE* h)
+{
+    char *buffer = malloc(BUFFER_MAX * sizeof(char));
+
+    imprimir_dicionario_aux(*h, buffer, 0);
+
+    free(buffer);
+}
+
+static void buscarPrefixo_aux(TST_TRIE h, char* buffer, char* str, int n)
+{
+    if(vazia(h))
+        return;
+
+    buscarPrefixo_aux(h->menor, buffer, str, n);
+
+    buffer[n] = h->ch;
+
+    if(h->valor != -1){
+        register int i;
+        register int j;
+        int flag = 1;
+
+        buffer[n+1] = 0;
+
+        for(i = 0, j = 0; i < strlen(str) && j < strlen(buffer); i++, j++){
+            if(buffer[j] != str[i])
+                flag = 0;
+        }
+
+        if(flag)
+            printf("%s\n", buffer);
+    }
+
+    buscarPrefixo_aux(h->igual, buffer, str, n+1);
+    buscarPrefixo_aux(h->maior, buffer, str, n);
+}
+
+void buscarPrefixo(TST_TRIE* h, char* str)
+{
+    char* buffer = malloc(BUFFER_MAX * sizeof(char));
+
+    buscarPrefixo_aux(*h, buffer, str, 0);
+
+    free(buffer);
 }
