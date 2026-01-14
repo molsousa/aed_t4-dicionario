@@ -5,14 +5,12 @@
 
 void ler_arquivo_texto(TST_TRIE* h)
 {
-    char arquivo[NOME_MAX] = "teste.txt";
+    char arquivo[NOME_MAX];
     char str[NOME_MAX];
     int i = 0;
 
-    /*
     printf("Insira o nome do arquivo de texto: ");
     scanf("%[^\n]%*c", arquivo);
-    */
 
     FILE* fr = fopen(arquivo, "r");
 
@@ -50,10 +48,8 @@ void ler_arquivo_stopwords(TST_TRIE* h)
     char arquivo[NOME_MAX] = "stopwords.txt";
     char str[NOME_MAX];
 
-    /*
     printf("Insira o nome do arquivo de texto: ");
     scanf("%[^\n]%*c", arquivo);
-    */
 
     FILE* fr = fopen(arquivo, "r");
 
