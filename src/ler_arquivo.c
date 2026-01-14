@@ -56,7 +56,9 @@ void ler_arquivo_stopwords(TST_TRIE* h)
     while(fgets(str, NOME_MAX, fr)){
         strtok(str, "\n");
 
-        removerTST(h, str);
+        char* str_removida = removerTST(h, str);
+
+        printf("Palavra removida: %s\n", str_removida);
     }
 
     fclose(fr);

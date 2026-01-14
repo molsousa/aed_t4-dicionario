@@ -74,24 +74,9 @@ static TST_TRIE insere(TST_TRIE h, char* str, int valor)
     return h;
 }
 
-static int buscaValor(TST_TRIE h, int valor)
-{
-    if(vazia(h))
-        return 0;
-
-    if(h->valor == valor)
-        return 1;
-
-    buscaValor(h->menor, valor);
-    buscaValor(h->igual, valor);
-    buscaValor(h->maior, valor);
-
-    return 0;
-}
-
 int inserirTST(TST_TRIE* h, char* str, int valor)
 {
-    if(buscaValor(*h, valor))
+    if(buscarTST(h, str))
         return 0;
 
     *h = insere(*h, str, valor);
@@ -120,24 +105,22 @@ static TST_TRIE remover(TST_TRIE h, char* str)
         }
         else
             h->igual = remover(h->igual, str+1);
-
-        /*
-        if(h->igual == NULL && h->valor == -1){
-            free(h);
-            return NULL;
-        }
-        */
     }
 
     return h;
 }
 
-void removerTST(TST_TRIE* h, char* str)
+char* removerTST(TST_TRIE* h, char* str)
 {
     if(!buscarTST(h, str))
-        return;
+        return NULL;
+
+    char* str_removida = malloc(BUFFER_MAX * sizeof(char));
+    strcpy(str_removida, str);
 
     *h = remover(*h, str);
+
+    return str_removida;
 }
 
 static void imprimir_dicionario_aux(TST_TRIE h, char* buffer, int n)
@@ -151,7 +134,7 @@ static void imprimir_dicionario_aux(TST_TRIE h, char* buffer, int n)
 
     if(h->valor != -1){
         buffer[n+1] = 0;
-        printf("%s | %d\n", buffer, h->valor);
+        printf("%-15s|%4d\n", buffer, h->valor);
     }
 
     imprimir_dicionario_aux(h->igual, buffer, n+1);
@@ -160,9 +143,14 @@ static void imprimir_dicionario_aux(TST_TRIE h, char* buffer, int n)
 
 void imprimir_dicionarioTST(TST_TRIE* h)
 {
+    if(vazia(*h))
+        return;
+
     char *buffer = malloc(BUFFER_MAX * sizeof(char));
 
+    printf("====================\n");
     imprimir_dicionario_aux(*h, buffer, 0);
+    printf("====================\n");
 
     free(buffer);
 }
@@ -224,6 +212,9 @@ static void buscarTST_aux(TST_TRIE h, char* str, char* buffer, int n, int* res)
     buscarTST_aux(h->maior, str, buffer, n, res);
 }
 
+// Funcao para buscar palavras em arvoreTST
+// Pre-condicao: nenhuma
+// Pos-condicao: retorna 1 se a palavra existir
 int buscarTST(TST_TRIE* h, char* str)
 {
     int res = 0;

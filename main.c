@@ -40,6 +40,7 @@ void menu()
                 break;
             case 3:
                 ler_arquivo_stopwords(h);
+                system("sleep 5");
                 break;
             case 4:
                 {
