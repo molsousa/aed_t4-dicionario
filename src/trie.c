@@ -3,6 +3,7 @@
 #include <string.h>
 #include "../include/trie.h"
 
+// Estrutura para no TST
 struct noTST{
     char ch;
     int valor;
@@ -11,6 +12,9 @@ struct noTST{
     struct noTST* maior;
 };
 
+// Funcao para criar arvore trie
+// Pre-condicao: nenhuma
+// Pos-condicao: retorna ponteiro para noTST
 TST_TRIE* criar_trie()
 {
     TST_TRIE* h = malloc(sizeof(TST_TRIE));
@@ -20,6 +24,9 @@ TST_TRIE* criar_trie()
     return h;
 }
 
+// Funcao estatica auxiliar para liberar nos
+// Pre-condicao: nenhuma
+// Pos-condicao: nenhuma
 static void liberar_recursivo(TST_TRIE h)
 {
     if(vazia(h))
@@ -32,6 +39,9 @@ static void liberar_recursivo(TST_TRIE h)
     free(h);
 }
 
+// Funcao para liberar arvore trie
+// Pre-condicao: arvore criada
+// Pos-condicao: destroi os nosTST
 TST_TRIE* liberar(TST_TRIE* h)
 {
     liberar_recursivo(*h);
@@ -41,11 +51,17 @@ TST_TRIE* liberar(TST_TRIE* h)
     return NULL;
 }
 
+// Funcao para verificar se um noTST eh vazio
+// Pre-condicao: nenhuma
+// Pos-condicao: retorna 0 se vazia
 int vazia(TST_TRIE h)
 {
     return (h == NULL);
 }
 
+// Funcao estatica auxiliar para inserir palavra
+// Pre-condicao: nenhuma
+// Pos-condicao: insere caractere por caractere na arvore
 static TST_TRIE insere(TST_TRIE h, char* str, int valor)
 {
     if(vazia(h)){
@@ -74,6 +90,9 @@ static TST_TRIE insere(TST_TRIE h, char* str, int valor)
     return h;
 }
 
+// Funcao para inserir em arvoreTST
+// Pre-condicao: arvore criada
+// Pos-condicao: insere novas palavras
 int inserirTST(TST_TRIE* h, char* str, int valor)
 {
     if(buscarTST(h, str))
@@ -84,6 +103,9 @@ int inserirTST(TST_TRIE* h, char* str, int valor)
     return 1;
 }
 
+// Funcao estatica auxiliar para remover palavra
+// Pre-condicao: nenhuma
+// Pos-condicao: remove caractere por caractere ate a raiz ou divisao
 static TST_TRIE remover(TST_TRIE h, char* str)
 {
     if(vazia(h))
@@ -110,6 +132,9 @@ static TST_TRIE remover(TST_TRIE h, char* str)
     return h;
 }
 
+// Funcao para remover palavra em arvoreTST
+// Pre-condicao: arvore criada
+// Pos-condicao: retorna palavra removida
 char* removerTST(TST_TRIE* h, char* str)
 {
     if(!buscarTST(h, str))
@@ -123,6 +148,9 @@ char* removerTST(TST_TRIE* h, char* str)
     return str_removida;
 }
 
+// Funcao estatica auxiliar para imprimir dicionario
+// Pre-condicao: nenhuma
+// Pos-condicao: nenhuma
 static void imprimir_dicionario_aux(TST_TRIE h, char* buffer, int n)
 {
     if(vazia(h))
@@ -141,6 +169,9 @@ static void imprimir_dicionario_aux(TST_TRIE h, char* buffer, int n)
     imprimir_dicionario_aux(h->maior, buffer, n);
 }
 
+// Funcao para imprimir palavras
+// Pre-condicao: arvore criada
+// Pos-condicao: nenhuma
 void imprimir_dicionarioTST(TST_TRIE* h)
 {
     if(vazia(*h))
@@ -155,6 +186,9 @@ void imprimir_dicionarioTST(TST_TRIE* h)
     free(buffer);
 }
 
+// Funcao estatica auxiliar para buscar palavras por prefixo
+// Pre-condicao: nenhuma
+// Pos-condicao: nenhuma
 static void buscarPrefixo_aux(TST_TRIE h, char* buffer, char* str, int n)
 {
     if(vazia(h))
@@ -184,6 +218,9 @@ static void buscarPrefixo_aux(TST_TRIE h, char* buffer, char* str, int n)
     buscarPrefixo_aux(h->maior, buffer, str, n);
 }
 
+// Funcao para buscar palavras com determinado prefixo
+// Pre-condicao: arvore criada
+// Pos-condicao: nenhuma
 void buscarPrefixo(TST_TRIE* h, char* str)
 {
     char* buffer = malloc(BUFFER_MAX * sizeof(char));
@@ -193,6 +230,9 @@ void buscarPrefixo(TST_TRIE* h, char* str)
     free(buffer);
 }
 
+// Funcao estatica auxiliar para buscar palavra
+// Pre-condicao: nenhuma
+// Pos-condicao: ponteiro para inteiro recebe 1 se encontrada
 static void buscarTST_aux(TST_TRIE h, char* str, char* buffer, int n, int* res)
 {
     if(vazia(h))

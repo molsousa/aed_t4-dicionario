@@ -9,7 +9,7 @@
 // Funcao para ler arquivo de texto
 // Pre-condicao: nenhuma
 // Pos-condicao: insere palavras em arvoreTST
-void ler_arquivo_texto(TST_TRIE*);
+void ler_arquivo_texto(TST_TRIE*, int*);
 
 // Funcao para verificar condicao de uma palavra
 // Pre-condicao: nenhuma
