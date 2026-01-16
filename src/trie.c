@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "../include/trie.h"
 
 // Estrutura para no TST
@@ -18,6 +19,8 @@ struct noTST{
 TST_TRIE* criar_trie()
 {
     TST_TRIE* h = malloc(sizeof(TST_TRIE));
+    if(!h)
+        erro();
 
     *h = NULL;
 
@@ -54,7 +57,7 @@ TST_TRIE* liberar(TST_TRIE* h)
 // Funcao para verificar se um noTST eh vazio
 // Pre-condicao: nenhuma
 // Pos-condicao: retorna 0 se vazia
-int vazia(TST_TRIE h)
+BOOL vazia(TST_TRIE h)
 {
     return (h == NULL);
 }
@@ -66,6 +69,9 @@ static TST_TRIE insere(TST_TRIE h, char* str, int valor)
 {
     if(vazia(h)){
         h = malloc(sizeof(struct noTST));
+        if(!h)
+            erro();
+
         h->ch = *str;
         h->maior = h->menor = h->igual = NULL;
         h->valor = -1;
@@ -93,14 +99,14 @@ static TST_TRIE insere(TST_TRIE h, char* str, int valor)
 // Funcao para inserir em arvoreTST
 // Pre-condicao: arvore criada
 // Pos-condicao: insere novas palavras
-int inserirTST(TST_TRIE* h, char* str, int valor)
+BOOL inserirTST(TST_TRIE* h, char* str, int valor)
 {
     if(buscarTST(h, str))
-        return 0;
+        return FALSE;
 
     *h = insere(*h, str, valor);
 
-    return 1;
+    return TRUE;
 }
 
 // Funcao estatica auxiliar para remover palavra
@@ -141,6 +147,9 @@ char* removerTST(TST_TRIE* h, char* str)
         return NULL;
 
     char* str_removida = malloc(BUFFER_MAX * sizeof(char));
+    if(!str_removida)
+        erro();
+
     strcpy(str_removida, str);
 
     *h = remover(*h, str);
@@ -178,6 +187,8 @@ void imprimir_dicionarioTST(TST_TRIE* h)
         return;
 
     char *buffer = malloc(BUFFER_MAX * sizeof(char));
+    if(!buffer)
+        erro();
 
     printf("====================\n");
     imprimir_dicionario_aux(*h, buffer, 0);
@@ -201,14 +212,13 @@ static void buscarPrefixo_aux(TST_TRIE h, char* buffer, char* str, int n)
     if(h->valor != -1){
         register int i;
         register int j;
-        int flag = 1;
+        BOOL flag = TRUE;
 
         buffer[n+1] = 0;
 
-        for(i = 0, j = 0; i < strlen(str) && j < strlen(buffer); i++, j++){
+        for(i = 0, j = 0; i < strlen(str) && j < strlen(buffer); i++, j++)
             if(buffer[j] != str[i])
-                flag = 0;
-        }
+                flag = FALSE;
 
         if(flag)
             printf("%s\n", buffer);
@@ -224,6 +234,8 @@ static void buscarPrefixo_aux(TST_TRIE h, char* buffer, char* str, int n)
 void buscarPrefixo(TST_TRIE* h, char* str)
 {
     char* buffer = malloc(BUFFER_MAX * sizeof(char));
+    if(!buffer)
+        erro();
 
     buscarPrefixo_aux(*h, buffer, str, 0);
 
@@ -233,7 +245,7 @@ void buscarPrefixo(TST_TRIE* h, char* str)
 // Funcao estatica auxiliar para buscar palavra
 // Pre-condicao: nenhuma
 // Pos-condicao: ponteiro para inteiro recebe 1 se encontrada
-static void buscarTST_aux(TST_TRIE h, char* str, char* buffer, int n, int* res)
+static void buscarTST_aux(TST_TRIE h, char* str, char* buffer, int n, BOOL* res)
 {
     if(vazia(h))
         return;
@@ -245,7 +257,7 @@ static void buscarTST_aux(TST_TRIE h, char* str, char* buffer, int n, int* res)
         buffer[n+1] = 0;
 
         if(!strcmp(buffer, str))
-            *res = 1;
+            *res = TRUE;
     }
 
     buscarTST_aux(h->igual, str, buffer, n+1, res);
@@ -255,12 +267,25 @@ static void buscarTST_aux(TST_TRIE h, char* str, char* buffer, int n, int* res)
 // Funcao para buscar palavras em arvoreTST
 // Pre-condicao: nenhuma
 // Pos-condicao: retorna 1 se a palavra existir
-int buscarTST(TST_TRIE* h, char* str)
+BOOL buscarTST(TST_TRIE* h, char* str)
 {
-    int res = 0;
+    BOOL res = FALSE;
     char* buffer = malloc(BUFFER_MAX * sizeof(char));
+    if(!buffer)
+        erro();
 
     buscarTST_aux(*h, str, buffer, 0, &res);
 
+    free(buffer);
+
     return res;
+}
+
+// Funcao para exibir erro de alocacao
+// Pre-condicao: memoria nao pode ser alocada
+// Pos-condicao: encerra o programa
+void erro()
+{
+    printf("Nao foi possivel alocar memoria\n");
+    exit(1);
 }

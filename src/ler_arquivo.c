@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "../include/ler_arquivo.h"
 
 // Funcao para ler arquivo de texto
@@ -8,15 +9,17 @@
 // Pos-condicao: insere palavras em arvoreTST
 void ler_arquivo_texto(TST_TRIE* h, int* valor)
 {
-    char arquivo[NOME_MAX];
-    char str[NOME_MAX];
+    char arquivo[BUFFER_MAX];
+    char str[BUFFER_MAX];
 
     printf("Insira o nome do arquivo de texto: ");
     scanf("%[^\n]%*c", arquivo);
 
     FILE* fr = fopen(arquivo, "r");
+    if(!fr)
+        erro();
 
-    while(fgets(str, NOME_MAX, fr)){
+    while(fgets(str, BUFFER_MAX, fr)){
         strtok(str, "\n");
 
         verificar_string(h, str, valor);
@@ -31,15 +34,15 @@ void ler_arquivo_texto(TST_TRIE* h, int* valor)
 void verificar_string(TST_TRIE* h, char* str, int* valor)
 {
     register int i;
-    int flag = 1;
+    BOOL flag = TRUE;
 
     for(i = 0; i < strlen(str); i++){
         if(str[i] < 65)
-            flag = 0;
+            flag = FALSE;
 
         if(str[i] > 90)
             if(str[i] < 97 || str[i] > 122)
-                flag = 0;
+                flag = FALSE;
     }
 
     if(flag)
@@ -52,15 +55,17 @@ void verificar_string(TST_TRIE* h, char* str, int* valor)
 // Pos-condicao: remove palavras do stopwords se inseridas em arvoreTST
 void ler_arquivo_stopwords(TST_TRIE* h)
 {
-    char arquivo[NOME_MAX] = "stopwords.txt";
-    char str[NOME_MAX];
+    char arquivo[BUFFER_MAX] = "stopwords.txt";
+    char str[BUFFER_MAX];
 
     printf("Insira o nome do arquivo de texto: ");
     scanf("%[^\n]%*c", arquivo);
 
     FILE* fr = fopen(arquivo, "r");
+    if(!fr)
+        erro();
 
-    while(fgets(str, NOME_MAX, fr)){
+    while(fgets(str, BUFFER_MAX, fr)){
         strtok(str, "\n");
 
         char* str_removida = removerTST(h, str);

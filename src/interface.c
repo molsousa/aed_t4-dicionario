@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "../include/trie.h"
 #include "../include/ler_arquivo.h"
 #include "../include/interface.h"
@@ -69,6 +70,9 @@ void menu()
     h = liberar(h);
 }
 
+// Funcao para pausar por 3seg no linux
+// Pre-condicao: nenhuma
+// Pos-condicao: se windows, usa o pause
 void pause3()
 {
     #ifdef _WIN32
@@ -78,6 +82,9 @@ void pause3()
     #endif
 }
 
+// Funcao para pausar por 5seg no linux
+// Pre-condicao: nenhuma
+// Pos-condicao: se windows, usa o pause
 void pause5()
 {
     #ifdef _WIN32
@@ -87,6 +94,9 @@ void pause5()
     #endif
 }
 
+// Funcao para limpar terminal
+// Pre-condicao: nenhuma
+// Pos-condicao: nenhuma
 void cls()
 {
     #ifdef _WIN32
