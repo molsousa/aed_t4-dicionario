@@ -69,8 +69,11 @@ void ler_arquivo_stopwords(TST_TRIE* h)
         strtok(str, "\n");
 
         char* str_removida = removerTST(h, str);
-        printf("Palavra removida: %s\n", str_removida);
-        free(str_removida);
+
+        if(str_removida){
+            printf("Palavra removida: %s\n", str_removida);
+            free(str_removida);
+        }
     }
 
     fclose(fr);
